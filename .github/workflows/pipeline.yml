@@ -103,7 +103,7 @@ jobs:
       - run: eval $(ssh-agent -s)
       - run: mkdir -p ~/.ssh
       - run: chmod 700 ~/.ssh
-      - run: ssh-keyscan --help
+      # - run: ssh-keyscan --help
       # - run: ssh-keyscan "$DOMAIN" >> ~/.ssh/known_hosts
       # - run: chmod 644 ~/.ssh/known_hosts
 
