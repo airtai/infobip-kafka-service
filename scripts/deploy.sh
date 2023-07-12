@@ -45,7 +45,7 @@ sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@
 
 echo "INFO: copying .env file to server"
 sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "rm -rf /home/$SSH_USER/.env"
-sshpass -p "$SSH_PASSWORD" scp -p 13402 -o StrictHostKeyChecking=no .env "$SSH_USER"@"$DOMAIN":/home/$SSH_USER/.env
+sshpass -p "$SSH_PASSWORD" scp -P 13402 -o StrictHostKeyChecking=no .env "$SSH_USER"@"$DOMAIN":/home/$SSH_USER/.env
 
 echo "INFO: pulling docker images"
 sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "echo $GITHUB_PASSWORD | docker login -u '$GITHUB_USERNAME' --password-stdin '$CI_REGISTRY'"
@@ -55,5 +55,5 @@ sleep 10
 echo "Deleting old images"
 sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker system prune -f || echo 'No images to delete'"
 
-echo "INFO: starting docker containers using compose files"
+echo "INFO: starting docker container"
 sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker run --name $SSH_USER-iks --env-file /home/$SSH_USER/.env -d '$CI_REGISTRY_IMAGE':'$TAG'"
