@@ -68,3 +68,41 @@ jobs:
       - run: sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
       - run: if [[ $GITHUB_REF_NAME == "main" ]]; then docker pull ghcr.io/$GITHUB_REPOSITORY:latest ; else docker pull ghcr.io/$GITHUB_REPOSITORY:dev ; fi;
       - run: bash ./scripts/check_docker.sh
+
+  deploy:
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
+    needs: [docker_image_check]
+    if: github.ref_name == 'main' || github.ref_name == 'dev'
+    container:
+      image: python:3.7-stretch
+    env:
+      GITHUB_USERNAME: ${{ github.actor }}
+      GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+      # PROD_SSH_USER: ${{ secrets.PROD_SSH_USER }}
+      # PROD_SSH_PASSWORD: ${{ secrets.PROD_SSH_PASSWORD }}
+      STAGING_SSH_USER: ${{ secrets.STAGING_SSH_USER }}
+      STAGING_SSH_PASSWORD: ${{ secrets.STAGING_SSH_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v3
+      # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
+      - run: chown -R $(id -u):$(id -g) $PWD
+      - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "TAG=latest" >> $GITHUB_ENV ; else echo "TAG=dev" >> $GITHUB_ENV ; fi;
+      - run: if [[ $GITHUB_REF_NAME == "main" ]]; then printenv PROD_CONFIG > "$(pwd)/.env" ; else printenv STAGING_CONFIG > "$(pwd)/.env" ; fi;
+
+      - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "SSH_USER=$PROD_SSH_USER" >> $GITHUB_ENV ; else echo "SSH_USER=$STAGING_SSH_USER" >> $GITHUB_ENV ; fi;
+      - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "SSH_PASSWORD=$PROD_SSH_PASSWORD" >> $GITHUB_ENV ; else echo "SSH_PASSWORD=$STAGING_SSH_PASSWORD" >> $GITHUB_ENV ; fi;
+
+      - run: sed 's/\"//g' .env >> $GITHUB_ENV
+      - run: echo "PATH=$PATH:/github/home/.local/bin" >> $GITHUB_ENV
+      - run: 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git sshpass -y )'
+      - run: eval $(ssh-agent -s)
+      - run: mkdir -p ~/.ssh
+      - run: chmod 700 ~/.ssh
+      - run: ssh-keyscan "$DOMAIN" >> ~/.ssh/known_hosts
+      - run: chmod 644 ~/.ssh/known_hosts
+
+      - run: sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
+      # - run: sh scripts/deploy.sh
