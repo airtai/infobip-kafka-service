@@ -40,27 +40,20 @@ fi
 
 
 echo "INFO: stopping already running docker container"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "set -a && source .env && set +a && docker-compose -p airt-service -f docker/dependencies.yml -f docker/base-server.yml -f docker/server.yml down || echo 'No containers available to stop'"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "docker container prune -f || echo 'No stopped containers to delete'"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker stop $SSH_USER-iks || echo 'No containers available to stop'"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker container prune -f || echo 'No stopped containers to delete'"
 
-# echo "INFO: copying docker compose files to server"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "rm -rf /home/azureuser/docker"
-# scp -o StrictHostKeyChecking=no -i key.pem -r ./docker azureuser@"$DOMAIN":/home/azureuser/docker
+echo "INFO: copying .env file to server"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "rm -rf /home/$SSH_USER/.env"
+sshpass -p "$SSH_PASSWORD" scp -p 13402 -o StrictHostKeyChecking=no .env "$SSH_USER"@"$DOMAIN":/home/$SSH_USER/.env
 
-# echo "INFO: copying .env file to server"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "rm -rf /home/azureuser/.env"
-# scp -o StrictHostKeyChecking=no -i key.pem .env azureuser@"$DOMAIN":/home/azureuser/.env
+echo "INFO: pulling docker images"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "echo $GITHUB_PASSWORD | docker login -u '$GITHUB_USERNAME' --password-stdin '$CI_REGISTRY'"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker pull '$CI_REGISTRY_IMAGE':'$TAG'"
+sleep 10
 
-# echo "INFO: Creating storage directory if it doesn't exists"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "mkdir -p /home/azureuser/storage"
+echo "Deleting old images"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker system prune -f || echo 'No images to delete'"
 
-# echo "INFO: pulling docker images"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "echo $GITHUB_PASSWORD | docker login -u '$GITHUB_USERNAME' --password-stdin '$CI_REGISTRY'"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "docker pull '$CI_REGISTRY_IMAGE':'$TAG'"
-# sleep 10
-
-# echo "Deleting old images"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "docker system prune -f || echo 'No images to delete'"
-
-# echo "INFO: starting docker containers using compose files"
-# ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$DOMAIN" "set -a && source .env && set +a && docker-compose -p airt-service -f docker/dependencies.yml -f docker/base-server.yml -f docker/server.yml up -d --no-recreate"
+echo "INFO: starting docker containers using compose files"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker run --name $SSH_USER-iks --env-file /home/$SSH_USER/.env -d '$CI_REGISTRY_IMAGE':'$TAG'"

@@ -103,9 +103,6 @@ jobs:
       - run: eval $(ssh-agent -s)
       - run: mkdir -p ~/.ssh
       - run: chmod 700 ~/.ssh
-      # - run: ssh-keyscan --help
-      # - run: ssh-keyscan "$DOMAIN" >> ~/.ssh/known_hosts
-      # - run: chmod 644 ~/.ssh/known_hosts
 
       - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
-      # - run: sh scripts/deploy.sh
+      - run: sh scripts/deploy.sh
