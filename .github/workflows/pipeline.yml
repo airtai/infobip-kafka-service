@@ -107,5 +107,5 @@ jobs:
       # - run: ssh-keyscan "$DOMAIN" >> ~/.ssh/known_hosts
       # - run: chmod 644 ~/.ssh/known_hosts
 
-      - run: sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
+      - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
       # - run: sh scripts/deploy.sh
