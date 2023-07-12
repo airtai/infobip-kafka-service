@@ -95,9 +95,10 @@ jobs:
       - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "SSH_USER=$PROD_SSH_USER" >> $GITHUB_ENV ; else echo "SSH_USER=$STAGING_SSH_USER" >> $GITHUB_ENV ; fi;
       - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "SSH_PASSWORD=$PROD_SSH_PASSWORD" >> $GITHUB_ENV ; else echo "SSH_PASSWORD=$STAGING_SSH_PASSWORD" >> $GITHUB_ENV ; fi;
 
-      - run: sed 's/\"//g' .env >> $GITHUB_ENV
+      # - run: sed 's/\"//g' .env >> $GITHUB_ENV
       - run: echo "PATH=$PATH:/github/home/.local/bin" >> $GITHUB_ENV
-      - run: 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git sshpass -y )'
+      - run: 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+      - run:  apt-get install sshpass -y
       - run: eval $(ssh-agent -s)
       - run: mkdir -p ~/.ssh
       - run: chmod 700 ~/.ssh
