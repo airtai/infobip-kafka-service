@@ -77,7 +77,7 @@ jobs:
     needs: [docker_image_check]
     if: github.ref_name == 'main' || github.ref_name == 'dev'
     container:
-      image: python:3.7-stretch
+      image: ubuntu:22.04
     env:
       GITHUB_USERNAME: ${{ github.actor }}
       GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
