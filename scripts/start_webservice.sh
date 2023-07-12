@@ -13,6 +13,8 @@ echo NUM_WORKERS set to $NUM_WORKERS
 # else
 #     KAFKA_BROKER="dev"
 # fi
+
+KAFKA_BROKER="staging"
 echo KAFKA_BROKER value set to $KAFKA_BROKER
 
 fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER downloading:app > ./downloading.log & 
