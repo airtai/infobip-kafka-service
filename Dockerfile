@@ -1,4 +1,6 @@
-ARG BASE_IMAGE=ubuntu:22.04
+# ARG BASE_IMAGE=ubuntu:22.04
+
+ARG BASE_IMAGE=ubuntu:22.04nvidia/cuda:12.2.0-base-ubuntu20.04
 
 FROM $BASE_IMAGE
 
@@ -31,11 +33,11 @@ RUN python3 -m pip install --upgrade pip
 #     else pip3 install git+https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/airt.ai/airt.git@${AIRT_LIB_BRANCH} ; \
 #     fi
 
-COPY downloading.py training.py requirements.txt scripts/start_webservice.sh ./
+COPY downloading.py training.py requirements.txt scripts/start_service.sh ./
 
 # Install requirements
 RUN pip install -r requirements.txt
 
 
 ENTRYPOINT []
-CMD [ "/usr/bin/bash", "-c", "./start_webservice.sh" ]
+CMD [ "/usr/bin/bash", "-c", "./start_service.sh" ]
