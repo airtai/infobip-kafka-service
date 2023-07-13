@@ -95,6 +95,7 @@ jobs:
 
       - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "SSH_USER=$PROD_SSH_USER" >> $GITHUB_ENV ; else echo "SSH_USER=$STAGING_SSH_USER" >> $GITHUB_ENV ; fi;
       - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "SSH_PASSWORD=$PROD_SSH_PASSWORD" >> $GITHUB_ENV ; else echo "SSH_PASSWORD=$STAGING_SSH_PASSWORD" >> $GITHUB_ENV ; fi;
+      - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "GPU_DEVICE=$PROD_GPU_DEVICE" >> $GITHUB_ENV ; else echo "GPU_DEVICE=$STAGING_GPU_DEVICE" >> $GITHUB_ENV ; fi;
 
       # - run: sed 's/\"//g' .env >> $GITHUB_ENV
       - run: echo "PATH=$PATH:/github/home/.local/bin" >> $GITHUB_ENV
