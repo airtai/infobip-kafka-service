@@ -22,9 +22,9 @@ RUN apt update --fix-missing && apt upgrade --yes \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
-RUN update-alternatives --set python3 /usr/bin/python3.9
+# RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
+# RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 2
+# RUN update-alternatives --set python3 /usr/bin/python3.9
 RUN python3 -m pip install --upgrade pip
 
 # # Install airt-lib
