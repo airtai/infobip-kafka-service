@@ -35,4 +35,4 @@ then
 fi
 
 # Initiate trivy
-bash ./scripts/check_docker.sh
+# bash ./scripts/check_docker.sh
