@@ -83,8 +83,10 @@ jobs:
       GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       # PROD_SSH_USER: ${{ secrets.PROD_SSH_USER }}
       # PROD_SSH_PASSWORD: ${{ secrets.PROD_SSH_PASSWORD }}
+      PROD_GPU_DEVICE: ${{ secrets.PROD_GPU_DEVICE }}
       STAGING_SSH_USER: ${{ secrets.STAGING_SSH_USER }}
       STAGING_SSH_PASSWORD: ${{ secrets.STAGING_SSH_PASSWORD }}
+      STAGING_GPU_DEVICE: ${{ secrets.STAGING_GPU_DEVICE }}
       DOMAIN: ${{ secrets.DOMAIN }}
     steps:
       - uses: actions/checkout@v3
