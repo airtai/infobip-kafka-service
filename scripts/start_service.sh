@@ -12,8 +12,4 @@ echo KAFKA_BROKER value set to $KAFKA_BROKER
 
 fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER downloading:app > ./downloading.log & 
 
-# fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER training:app > ./training.log & 
-
-# tail -f training.log
-
 fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER training:app
