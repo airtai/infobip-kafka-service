@@ -26,8 +26,7 @@ if test -z "$ACCESS_REP_TOKEN"; then
 	echo ERROR: ACCESS_REP_TOKEN must be defined, exiting
 	exit -1
 else
-	# docker build --build-arg ACCESS_REP_TOKEN --cache-from $CI_REGISTRY_IMAGE:$CACHE_FROM -t $CI_REGISTRY_IMAGE:$TAG .
-	docker build --build-arg ACCESS_REP_TOKEN -t $CI_REGISTRY_IMAGE:$TAG .
+	docker build --build-arg ACCESS_REP_TOKEN --cache-from $CI_REGISTRY_IMAGE:$CACHE_FROM -t $CI_REGISTRY_IMAGE:$TAG .
 fi
 
 if [ "$CI_COMMIT_REF_NAME" == "main" ]
