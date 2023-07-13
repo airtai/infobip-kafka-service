@@ -1,1 +1,3 @@
 airt @ git+https://oauth2:${ACCESS_REP_TOKEN}@gitlab.com/airt.ai/airt.git@infobip-production
+# ToDo: Temporary thing. Remove later.
+ipython==8.11.0
