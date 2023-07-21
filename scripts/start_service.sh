@@ -14,4 +14,6 @@ fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER downloadin
 
 fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER training:app &> ./training.log & 
 
+venv/bin/python scheduler.py &> ./scheduler.log & 
+
 tail -f training.log
