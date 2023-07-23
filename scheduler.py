@@ -5,7 +5,7 @@ from pathlib import Path
 
 from aiokafka import AIOKafkaProducer
 from rocketry import Rocketry
-from rocketry.conds import daily, weekly, hourly
+from rocketry.conds import daily, weekly
 from rocketry.log import TaskRunRecord
 from redbird.logging import RepoHandler
 from redbird.repos import CSVFileRepo
@@ -45,8 +45,7 @@ async def start_weekly_training():
         await producer.stop()
 
 
-# ToDo: Change hourly to daily
-@app.task(hourly)
+@app.task(daily)
 async def start_daily_prediction():
     rows = get_unique_account_ids_model_ids()
     producer = AIOKafkaProducer(**aio_kafka_config)
