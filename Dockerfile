@@ -33,10 +33,13 @@ RUN python3 -m pip install --upgrade pip
 #     else pip3 install git+https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/airt.ai/airt.git@${AIRT_LIB_BRANCH} ; \
 #     fi
 
-COPY downloading.py training.py requirements.txt scripts/start_service.sh ./
+COPY downloading.py training.py scheduler.py helpers.py logger.py clickhouse_helpers.py requirements.txt scheduler_requirements.txt scripts/start_service.sh ./
 
 # Install requirements
 RUN pip install -r requirements.txt
+
+RUN virtualenv venv -p python3
+RUN venv/bin/pip install -r scheduler_requirements.txt
 
 
 ENTRYPOINT []
