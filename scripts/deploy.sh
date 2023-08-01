@@ -67,6 +67,7 @@ sleep 10
 
 echo "Deleting old images"
 sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker system prune -f || echo 'No images to delete'"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
 
 echo "INFO: starting docker container"
 sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker run --name $SSH_USER-iks --env-file /home/$SSH_USER/.env --gpus 'device=$GPU_DEVICE' -v $ROOT_PATH:$ROOT_PATH -d '$CI_REGISTRY_IMAGE':'$TAG'"
