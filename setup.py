@@ -56,6 +56,7 @@ from os import environ
 requirements = [
     f"airt@git+https://oauth2:{environ['ACCESS_REP_TOKEN']}@gitlab.com/airt.ai/airt.git@infobip-production",
     "cffi==1.15.1",
+    "traceback-with-variables==2.0.4",
 ]
 dev_requirements = [
     "mypy==1.3.0",
