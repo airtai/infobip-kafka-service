@@ -40,8 +40,13 @@ class ModelTrainingRequest(BaseModel):
     AccountId: NonNegativeInt = Field(
         ..., example=202020, description="ID of an account"
     )
-    ModelId: Optional[str] = Field(
+    ApplicationId: Optional[str] = Field(
         default=None,
+        example="TestApplicationId",
+        description="Id of the application in case there is more than one for the AccountId",
+    )
+    ModelId: str = Field(
+        ...,
         example="ChurnModelForDrivers",
         description="User supplied ID of the model trained",
     )
@@ -59,8 +64,13 @@ class StartPrediction(BaseModel):
     AccountId: NonNegativeInt = Field(
         ..., example=202020, description="ID of an account"
     )
-    ModelId: Optional[str] = Field(
+    ApplicationId: Optional[str] = Field(
         default=None,
+        example="TestApplicationId",
+        description="Id of the application in case there is more than one for the AccountId",
+    )
+    ModelId: str = Field(
+        ...,
         example="ChurnModelForDrivers",
         description="User supplied ID of the model trained",
     )

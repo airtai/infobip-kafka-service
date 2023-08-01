@@ -37,7 +37,7 @@ logger = get_logger(__name__)
 handler = RepoHandler(repo=csv_file_repo)
 
 # %% ../nbs/Scheduler.ipynb 5
-@app.task(weekly.on("Friday"))
+@app.task(weekly)
 async def start_weekly_training():
     rows = get_unique_account_ids_model_ids()
     producer = AIOKafkaProducer(**aio_kafka_config)
@@ -46,6 +46,7 @@ async def start_weekly_training():
         for row in rows:
             model_training_req = ModelTrainingRequest(
                 AccountId=row["AccountId"],
+                ApplicationId=row["ApplicationId"],
                 ModelId=row["ModelId"],
                 task_type="churn",
                 total_no_of_records=0,
@@ -66,6 +67,7 @@ async def start_daily_prediction():
         for row in rows:
             start_prediction = StartPrediction(
                 AccountId=row["AccountId"],
+                ApplicationId=row["ApplicationId"],
                 ModelId=row["ModelId"],
                 task_type="churn",
             )

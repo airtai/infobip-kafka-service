@@ -96,9 +96,7 @@ def _get_unique_account_ids_model_ids(
         table=table,
         protocol=protocol,
     ) as connection:
-        query = (
-            f"select DISTINCT on (AccountId, ModelId) AccountId, ModelId from {table}"
-        )
+        query = f"select DISTINCT on (AccountId, ModelId, ApplicationId) AccountId, ModelId, ApplicationId from {table}"
         df = pd.read_sql(sql=query, con=connection)
     return df.to_dict("records")
 
