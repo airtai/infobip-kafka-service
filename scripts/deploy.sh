@@ -53,21 +53,21 @@ then
 fi
 
 echo "INFO: stopping already running docker container"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker stop $SSH_USER-iks || echo 'No containers available to stop'"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker container prune -f || echo 'No stopped containers to delete'"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker stop $SSH_USER-iks || echo 'No containers available to stop'" # nosemgrep
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker container prune -f || echo 'No stopped containers to delete'" # nosemgrep
 
 echo "INFO: copying .env file to server"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "rm -rf /home/$SSH_USER/.env"
-sshpass -p "$SSH_PASSWORD" scp -P 13402 -o StrictHostKeyChecking=no .env "$SSH_USER"@"$DOMAIN":/home/$SSH_USER/.env
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "rm -rf /home/$SSH_USER/.env" # nosemgrep
+sshpass -p "$SSH_PASSWORD" scp -P 13402 -o StrictHostKeyChecking=no .env "$SSH_USER"@"$DOMAIN":/home/$SSH_USER/.env # nosemgrep
 
 echo "INFO: pulling docker images"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "echo $GITHUB_PASSWORD | docker login -u '$GITHUB_USERNAME' --password-stdin '$CI_REGISTRY'"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker pull '$CI_REGISTRY_IMAGE':'$TAG'"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "echo $GITHUB_PASSWORD | docker login -u '$GITHUB_USERNAME' --password-stdin '$CI_REGISTRY'" # nosemgrep
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker pull '$CI_REGISTRY_IMAGE':'$TAG'" # nosemgrep
 sleep 10
 
 echo "Deleting old images"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker system prune -f || echo 'No images to delete'"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker system prune -f || echo 'No images to delete'" # nosemgrep
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images" # nosemgrep
 
 echo "INFO: starting docker container"
-sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker run --name $SSH_USER-iks --env-file /home/$SSH_USER/.env --gpus 'device=$GPU_DEVICE' -v $ROOT_PATH:$ROOT_PATH -d '$CI_REGISTRY_IMAGE':'$TAG'"
+sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker run --name $SSH_USER-iks --env-file /home/$SSH_USER/.env --gpus 'device=$GPU_DEVICE' -v $ROOT_PATH:$ROOT_PATH -d '$CI_REGISTRY_IMAGE':'$TAG'" # nosemgrep

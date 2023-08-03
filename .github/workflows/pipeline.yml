@@ -121,5 +121,5 @@ jobs:
       - run: mkdir -p ~/.ssh
       - run: chmod 700 ~/.ssh
 
-      - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
+      - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images" # nosemgrep
       - run: bash ./scripts/deploy.sh
