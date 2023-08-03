@@ -9,6 +9,19 @@ env:
   STAGING_CONFIG: ${{ secrets.STAGING_CONFIG }}
 
 jobs:
+  mypy_static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: airtai/workflows/airt-mypy-check@main # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+  bandit_static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: airtai/workflows/airt-bandit-check@main # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+  semgrep_static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: airtai/workflows/airt-semgrep-check@main # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+
   trivy:
     runs-on: ubuntu-22.04
     container:
