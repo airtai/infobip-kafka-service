@@ -49,7 +49,7 @@ def _create_clickhouse_connection_string(
 
 # %% ../nbs/Clickhouse_Helpers.ipynb 6
 @contextmanager  # type: ignore
-def get_clickhouse_connection(  # type: ignore
+def get_clickhouse_connection(
     *,
     username: str,
     password: str,
@@ -87,7 +87,7 @@ def _get_unique_account_ids_model_ids(
     protocol: str,
     table: str,
 ) -> List[Dict[str, int]]:
-    with get_clickhouse_connection(  # type: ignore
+    with get_clickhouse_connection(
         username=username,
         password=password,
         host=host,
@@ -98,11 +98,11 @@ def _get_unique_account_ids_model_ids(
     ) as connection:
         query = f"select DISTINCT on (AccountId, ModelId, ApplicationId) AccountId, ModelId, ApplicationId from {table}"  # nosec B608:hardcoded_sql_expressions
         df = pd.read_sql(sql=query, con=connection)
-    return df.to_dict("records")
+    return df.to_dict("records")  # type: ignore
 
 
 def get_unique_account_ids_model_ids() -> List[Dict[str, int]]:
     db_params = get_clickhouse_params_from_env_vars()
     # Replace infobip_data with infobip_start_training_data for table param
     db_params["table"] = "infobip_start_training_data"
-    return _get_unique_account_ids_model_ids(**db_params)
+    return _get_unique_account_ids_model_ids(**db_params)  # type: ignore

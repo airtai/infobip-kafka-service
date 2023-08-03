@@ -26,7 +26,7 @@ from io import StringIO
 should_supress_timestamps: bool = False
 
 
-def supress_timestamps(flag: bool = True):
+def supress_timestamps(flag: bool = True) -> None:
     """Supress logger timestamp
 
     Args:
@@ -120,7 +120,7 @@ def get_logger(
     return logger
 
 # %% ../nbs/Logger.ipynb 15
-def set_level(level: int):
+def set_level(level: int) -> None:
     """Set logger level
 
     Args:

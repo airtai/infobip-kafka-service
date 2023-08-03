@@ -37,8 +37,8 @@ logger = get_logger(__name__)
 handler = RepoHandler(repo=csv_file_repo)
 
 # %% ../nbs/Scheduler.ipynb 5
-@app.task(weekly)
-async def start_weekly_training():
+@app.task(weekly)  # type: ignore
+async def start_weekly_training() -> None:
     rows = get_unique_account_ids_model_ids()
     producer = AIOKafkaProducer(**aio_kafka_config)
     await producer.start()
@@ -46,9 +46,9 @@ async def start_weekly_training():
         for row in rows:
             model_training_req = ModelTrainingRequest(
                 AccountId=row["AccountId"],
-                ApplicationId=row["ApplicationId"],
-                ModelId=row["ModelId"],
-                task_type="churn",
+                ApplicationId=row["ApplicationId"],  # type: ignore
+                ModelId=row["ModelId"],  # type: ignore
+                task_type="churn",  # type: ignore
                 total_no_of_records=0,
             )
             msg = (model_training_req.json()).encode("utf-8")
@@ -58,8 +58,8 @@ async def start_weekly_training():
         await producer.stop()
 
 # %% ../nbs/Scheduler.ipynb 6
-@app.task(daily)
-async def start_daily_prediction():
+@app.task(daily)  # type: ignore
+async def start_daily_prediction() -> None:
     rows = get_unique_account_ids_model_ids()
     producer = AIOKafkaProducer(**aio_kafka_config)
     await producer.start()
@@ -67,9 +67,9 @@ async def start_daily_prediction():
         for row in rows:
             start_prediction = StartPrediction(
                 AccountId=row["AccountId"],
-                ApplicationId=row["ApplicationId"],
-                ModelId=row["ModelId"],
-                task_type="churn",
+                ApplicationId=row["ApplicationId"],  # type: ignore
+                ModelId=row["ModelId"],  # type: ignore
+                task_type="churn",  # type: ignore
             )
             msg = (start_prediction.json()).encode("utf-8")
             logger.info(f"Sending daily retraining for {msg=}")
@@ -78,7 +78,7 @@ async def start_daily_prediction():
         await producer.stop()
 
 # %% ../nbs/Scheduler.ipynb 7
-async def main():
+async def main() -> None:
     "Launch Rocketry app"
     rocketry_task = asyncio.create_task(app.serve())
     await rocketry_task
