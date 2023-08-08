@@ -62,6 +62,7 @@ async def start_weekly_training() -> None:
 @app.task(daily)  # type: ignore
 async def start_daily_prediction() -> None:
     rows = get_unique_account_ids_model_ids()
+    aio_kafka_config = get_aio_kafka_config()
     producer = AIOKafkaProducer(**aio_kafka_config)
     await producer.start()
     try:
