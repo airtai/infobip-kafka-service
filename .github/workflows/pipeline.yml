@@ -69,7 +69,7 @@ jobs:
 
   docker_build_push:
     runs-on: ubuntu-22.04
-    needs: [mypy_static_analysis, bandit_static_analysis, semgrep_static_analysis, trivy]
+    needs: [mypy_static_analysis, bandit_static_analysis, semgrep_static_analysis, trivy, test]
     permissions:
       contents: read
       packages: write
