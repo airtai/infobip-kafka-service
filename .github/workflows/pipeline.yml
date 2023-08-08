@@ -64,6 +64,10 @@ jobs:
           ROOT_PATH: ./logs
           DOWNLOADING_GROUP_ID: infobip-test-downloader-1
           TRAINING_GROUP_ID: infobip-test-trainer-1
+          KAFKA_HOSTNAME: kafka
+          KAFKA_PORT: 9092
+          KAFKA_API_KEY: username
+          KAFKA_API_SECRET: password
         run: |
           nbdev_test --timing --do_print --skip_file_glob "Scheduler*" # Skip Scheduler notebook
 
