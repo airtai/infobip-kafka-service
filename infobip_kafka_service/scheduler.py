@@ -19,7 +19,7 @@ from redbird.repos import CSVFileRepo
 
 from .clickhouse_helpers import get_unique_account_ids_model_ids
 from infobip_kafka_service.helpers import (
-    aio_kafka_config,
+    get_aio_kafka_config,
     ModelTrainingRequest,
     StartPrediction,
 )
@@ -40,6 +40,7 @@ handler = RepoHandler(repo=csv_file_repo)
 @app.task(weekly)  # type: ignore
 async def start_weekly_training() -> None:
     rows = get_unique_account_ids_model_ids()
+    aio_kafka_config = get_aio_kafka_config()
     producer = AIOKafkaProducer(**aio_kafka_config)
     await producer.start()
     try:
