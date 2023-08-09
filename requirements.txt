@@ -1,0 +1,4 @@
+airt @ git+https://oauth2:${ACCESS_REP_TOKEN}@gitlab.com/airt.ai/airt.git@infobip-production
+# airt @ git+https://oauth2:${ACCESS_REP_TOKEN}@gitlab.com/airt.ai/airt.git@17c378e77a8d624bdd71d3fb276935a7638d4ec2
+cffi==1.15.1
+traceback-with-variables==2.0.4
