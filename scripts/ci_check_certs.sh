@@ -13,5 +13,5 @@ if [ "$days_until_expiry" -le "$THRESHOLD" ]; then
     echo "Certificate for $KAFKA_DOMAIN is expiring in $days_until_expiry days. PLEASE RENEW ASAP."
     exit -1
 else
-    echo "Certificate for $KAFKA_DOMAIN is not expiring within the next $THRESHOLD days. No action needed."
+    echo "Certificate for $KAFKA_DOMAIN is not expiring within the next $THRESHOLD days. Expires after $days_until_expiry days. No action needed."
 fi
