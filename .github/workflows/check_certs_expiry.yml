@@ -22,25 +22,13 @@ jobs:
     container:
       image: ubuntu:22.04
     env:
-      # GITHUB_USERNAME: ${{ github.actor }}
-      # GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       PROD_KAFKA_SSH_KEY: ${{ secrets.PROD_KAFKA_SSH_KEY }}
-      # PROD_SSH_PASSWORD: ${{ secrets.PROD_SSH_PASSWORD }}
-      # PROD_GPU_DEVICE: ${{ secrets.PROD_GPU_DEVICE }}
       STAGING_KAFKA_SSH_KEY: ${{ secrets.STAGING_KAFKA_SSH_KEY }}
-      # STAGING_SSH_PASSWORD: ${{ secrets.STAGING_SSH_PASSWORD }}
-      # STAGING_GPU_DEVICE: ${{ secrets.STAGING_GPU_DEVICE }}
-      # DOMAIN: ${{ secrets.DOMAIN }}
     steps:
       - uses: actions/checkout@v3
       # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
       - run: chown -R $(id -u):$(id -g) $PWD
-      # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "TAG=latest" >> $GITHUB_ENV ; else echo "TAG=dev" >> $GITHUB_ENV ; fi;
-      # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then printenv PROD_CONFIG > "$(pwd)/.env" ; else printenv STAGING_CONFIG > "$(pwd)/.env" ; fi;
-      # - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "SSH_PASSWORD=$STAGING_SSH_PASSWORD" >> $GITHUB_ENV ; else echo "SSH_PASSWORD=$PROD_SSH_PASSWORD" >> $GITHUB_ENV ; fi;
-      # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "GPU_DEVICE=$PROD_GPU_DEVICE" >> $GITHUB_ENV ; else echo "GPU_DEVICE=$STAGING_GPU_DEVICE" >> $GITHUB_ENV ; fi;
 
-      # - run: sed 's/\"//g' .env >> $GITHUB_ENV
       - run: echo "PATH=$PATH:/github/home/.local/bin" >> $GITHUB_ENV
       - run: 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
       - run: apt-get update -y && apt-get install sshpass -y
@@ -53,12 +41,9 @@ jobs:
       - run: ssh-keyscan "$KAFKA_DOMAIN" >> ~/.ssh/known_hosts
       - run: chmod 644 ~/.ssh/known_hosts
 
-      - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "I am staging" ; else echo "I am prod" ; fi;
       - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "$STAGING_KAFKA_SSH_KEY" | base64 --decode > key.pem ; else echo "$PROD_KAFKA_SSH_KEY" | base64 --decode > key.pem ; fi;
       - run: chmod 600 key.pem
-      - run: pwd
 
-      # - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
       - run: ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$KAFKA_DOMAIN" "ls -la"
       - run: bash ./scripts/ci_check_certs.sh
 
