@@ -31,9 +31,9 @@ jobs:
       # STAGING_GPU_DEVICE: ${{ secrets.STAGING_GPU_DEVICE }}
       # DOMAIN: ${{ secrets.DOMAIN }}
     steps:
-      # - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
       # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
-      # - run: chown -R $(id -u):$(id -g) $PWD
+      - run: chown -R $(id -u):$(id -g) $PWD
       # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "TAG=latest" >> $GITHUB_ENV ; else echo "TAG=dev" >> $GITHUB_ENV ; fi;
       # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then printenv PROD_CONFIG > "$(pwd)/.env" ; else printenv STAGING_CONFIG > "$(pwd)/.env" ; fi;
 
