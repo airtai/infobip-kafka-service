@@ -39,8 +39,11 @@ jobs:
       # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then printenv PROD_CONFIG > "$(pwd)/.env" ; else printenv STAGING_CONFIG > "$(pwd)/.env" ; fi;
 
       
+      - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "I am staging" ; else echo "I am prod" ; fi;
       - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "$STAGING_KAFKA_SSH_KEY" | base64 --decode > key.pem ; else echo "$PROD_KAFKA_SSH_KEY" | base64 --decode > key.pem ; fi;
       - run: chmod 600 key.pem
+      - run: pwd
+      - run: cat key.pem
       # - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "SSH_PASSWORD=$STAGING_SSH_PASSWORD" >> $GITHUB_ENV ; else echo "SSH_PASSWORD=$PROD_SSH_PASSWORD" >> $GITHUB_ENV ; fi;
       # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "GPU_DEVICE=$PROD_GPU_DEVICE" >> $GITHUB_ENV ; else echo "GPU_DEVICE=$STAGING_GPU_DEVICE" >> $GITHUB_ENV ; fi;
 
