@@ -37,13 +37,6 @@ jobs:
       - run: chown -R $(id -u):$(id -g) $PWD
       # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "TAG=latest" >> $GITHUB_ENV ; else echo "TAG=dev" >> $GITHUB_ENV ; fi;
       # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then printenv PROD_CONFIG > "$(pwd)/.env" ; else printenv STAGING_CONFIG > "$(pwd)/.env" ; fi;
-
-      
-      - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "I am staging" ; else echo "I am prod" ; fi;
-      - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "$STAGING_KAFKA_SSH_KEY" | base64 --decode > key.pem ; else echo "$PROD_KAFKA_SSH_KEY" | base64 --decode > key.pem ; fi;
-      - run: chmod 600 key.pem
-      - run: pwd
-      - run: cat key.pem
       # - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "SSH_PASSWORD=$STAGING_SSH_PASSWORD" >> $GITHUB_ENV ; else echo "SSH_PASSWORD=$PROD_SSH_PASSWORD" >> $GITHUB_ENV ; fi;
       # - run: if [[ $GITHUB_REF_NAME == "main" ]]; then echo "GPU_DEVICE=$PROD_GPU_DEVICE" >> $GITHUB_ENV ; else echo "GPU_DEVICE=$STAGING_GPU_DEVICE" >> $GITHUB_ENV ; fi;
 
@@ -60,8 +53,13 @@ jobs:
       - run: ssh-keyscan "$KAFKA_DOMAIN" >> ~/.ssh/known_hosts
       - run: chmod 644 ~/.ssh/known_hosts
 
+      - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "I am staging" ; else echo "I am prod" ; fi;
+      - run: if [[ $KAFKA_DOMAIN == *"staging"* ]]; then echo "$STAGING_KAFKA_SSH_KEY" | base64 --decode > key.pem ; else echo "$PROD_KAFKA_SSH_KEY" | base64 --decode > key.pem ; fi;
+      - run: chmod 600 key.pem
+      - run: pwd
+
       # - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
-      - run: ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$KAFKA_DOMAIN" "sudo ls -la"
+      - run: ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$KAFKA_DOMAIN" "ls -la"
       - run: bash ./scripts/ci_check_certs.sh
 
       - run: rm key.pem
