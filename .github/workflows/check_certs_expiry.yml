@@ -1,7 +1,6 @@
 name: Check letsencrypt certs expiry
 
 on:
-  push: # ToDo: Remove this later
   # everyday at 00:00
   schedule:
     - cron: "0 0 * * *"
