@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the threshold for certificate expiration (in days)
-THRESHOLD=365 # ToDo: Change this to 5
+THRESHOLD=5
 
 # Check if certificate is expiring within the threshold
 expiry_str=$(ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$KAFKA_DOMAIN" "sudo openssl x509 -in /etc/letsencrypt/live/$KAFKA_DOMAIN/fullchain.pem -noout -enddate | cut -d= -f2")
