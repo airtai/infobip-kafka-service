@@ -12,6 +12,7 @@ jobs:
   check-certs-expiry:
     name: Check letsencrypt certs expiry
     strategy:
+      fail-fast: false
       matrix:
         kafka_domain: ["kafka.staging.airt.ai", "kafka-cluster-1.staging.airt.ai", "kafka-cluster-2.staging.airt.ai", "kafka.airt.ai", "kafka-cluster-1.airt.ai", "kafka-cluster-2.airt.ai"]
     runs-on: ubuntu-22.04
@@ -57,6 +58,7 @@ jobs:
       - run: chmod 644 ~/.ssh/known_hosts
 
       # - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
+      - run: ssh -o StrictHostKeyChecking=no -i key.pem azureuser@"$KAFKA_DOMAIN" "sudo ls -la"
       - run: bash ./scripts/ci_check_certs.sh
 
       - run: rm key.pem
