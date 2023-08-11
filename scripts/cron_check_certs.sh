@@ -21,6 +21,9 @@ for domain in "${DOMAINS[@]}"; do
         sudo certbot renew --cert-name "$domain"
         if [ $? -eq 0 ]; then
             echo "Certificate renewed successfully for $domain."
+            sudo cp /etc/letsencrypt/live/$domain/fullchain.pem /var/lib/redpanda/certs/broker.crt
+            sudo cp /etc/letsencrypt/live/$domain/privkey.pem /var/lib/redpanda/certs/broker.key
+            echo "Copied renewed certificates."
             sudo service redpanda restart
             echo "Redpanda service restarted."
         else
