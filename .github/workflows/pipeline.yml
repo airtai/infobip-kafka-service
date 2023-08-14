@@ -92,6 +92,19 @@ jobs:
       - run: sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
       # - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY:dev || true
       - run: bash ./scripts/build_docker.sh
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: false
+          swap-storage: true
       - run: bash ./scripts/check_docker.sh
       - name: Push only if branch name is main or dev
         if: github.ref_name == 'main' || github.ref_name == 'dev'
