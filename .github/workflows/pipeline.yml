@@ -143,7 +143,7 @@ jobs:
           haskell: true
           large-packages: false
           docker-images: false
-          swap-storage: true
+          swap-storage: false
       - run: if [[ $GITHUB_REF_NAME == "main" ]]; then docker pull ghcr.io/$GITHUB_REPOSITORY:latest ; else docker pull ghcr.io/$GITHUB_REPOSITORY:dev ; fi;
       - run: bash ./scripts/check_docker.sh
 
