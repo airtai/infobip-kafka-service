@@ -35,5 +35,7 @@ then
 	docker tag $CI_REGISTRY_IMAGE:$TAG $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 fi
 
+docker system prune --force
+
 # Initiate trivy
 # bash ./scripts/check_docker.sh
