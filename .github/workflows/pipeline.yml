@@ -131,6 +131,19 @@ jobs:
       - run: sudo apt update
       - run: wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
       - run: sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          docker-images: false
+          swap-storage: true
       - run: if [[ $GITHUB_REF_NAME == "main" ]]; then docker pull ghcr.io/$GITHUB_REPOSITORY:latest ; else docker pull ghcr.io/$GITHUB_REPOSITORY:dev ; fi;
       - run: bash ./scripts/check_docker.sh
 
