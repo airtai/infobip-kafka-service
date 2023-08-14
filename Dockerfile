@@ -34,7 +34,7 @@ RUN python3 -m pip install --upgrade pip
 #     fi
 
 COPY infobip_kafka_service infobip_kafka_service
-COPY setup.py settings.ini scheduler_requirements.txt scripts/start_service.sh ./
+COPY setup.py settings.ini scheduler_requirements.txt scripts/start_service.sh README.md ./
 
 # RUN python3 setup.py sdist bdist_wheel
 
