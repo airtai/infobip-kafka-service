@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "infobip-kafka-service"
+  site-url: "https://airtai.github.io/infobip-kafka-service"
+  description: "FastKafka service for infobip"
+  repo-branch: main
+  repo-url: "https://github.com/airtai/infobip-kafka-service"
