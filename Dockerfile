@@ -42,6 +42,7 @@ COPY setup.py settings.ini scheduler_requirements.txt scripts/start_service.sh R
 RUN pip install -e ".[dev]"
 
 RUN virtualenv venv -p python3
+RUN venv/bin/pip install -e ".[dev]"
 RUN venv/bin/pip install -r scheduler_requirements.txt
 
 
