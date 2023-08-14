@@ -14,6 +14,6 @@ fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER infobip_ka
 
 fastkafka run --num-workers $NUM_WORKERS --kafka-broker $KAFKA_BROKER infobip_kafka_service.training:app &> ./training.log & 
 
-venv/bin/python infobip_kafka_service/scheduler.py &> ./scheduler.log & 
+venv/bin/python -m infobip_kafka_service.scheduler &> ./scheduler.log & 
 
 tail -f training.log
