@@ -9,6 +9,19 @@ env:
   STAGING_CONFIG: ${{ secrets.STAGING_CONFIG }}
 
 jobs:
+  mypy_static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: airtai/workflows/airt-mypy-check@main # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+  bandit_static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: airtai/workflows/airt-bandit-check@main # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+  semgrep_static_analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: airtai/workflows/airt-semgrep-check@main # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+
   trivy:
     runs-on: ubuntu-22.04
     container:
@@ -20,13 +33,58 @@ jobs:
       - run: trivy --version
       - run: sh ./scripts/trivy_scan_repo.sh
 
+  test:
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        os:  [ubuntu]
+        version: ["3.8"]
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Install quarto
+        uses: quarto-dev/quarto-actions/setup@v2 # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+      - name: Prepare nbdev env
+        uses: fastai/workflows/nbdev-ci@master # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+        with:
+          version: ${{ matrix.version }}
+          skip_test: true
+      - name: List pip deps
+        run: |
+          pip list
+      - name: Install testing deps
+        run: |
+          fastkafka docs install_deps
+          fastkafka testing install_deps
+      - name: Run nbdev tests
+        env:
+          ROOT_PATH: ./logs
+          DOWNLOADING_GROUP_ID: infobip-test-downloader-1
+          TRAINING_GROUP_ID: infobip-test-trainer-1
+          KAFKA_HOSTNAME: kafka
+          KAFKA_PORT: 9092
+          KAFKA_API_KEY: username
+          KAFKA_API_SECRET: password
+        run: |
+          nbdev_test --timing --do_print --skip_file_glob "Scheduler*" # Skip Scheduler notebook
+
   docker_build_push:
     runs-on: ubuntu-22.04
-    needs: trivy
+    needs: [mypy_static_analysis, bandit_static_analysis, semgrep_static_analysis, trivy, test]
     permissions:
       contents: read
       packages: write
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+        with:
+          root-reserve-mb: 30720
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -54,6 +112,13 @@ jobs:
       contents: read
       packages: read
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
+        with:
+          root-reserve-mb: 30720
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -108,5 +173,5 @@ jobs:
       - run: mkdir -p ~/.ssh
       - run: chmod 700 ~/.ssh
 
-      - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images"
+      - run: sshpass -p "$SSH_PASSWORD" ssh -p 13402 -o StrictHostKeyChecking=no "$SSH_USER"@"$DOMAIN" "docker images" # nosemgrep
       - run: bash ./scripts/deploy.sh
