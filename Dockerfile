@@ -12,10 +12,10 @@ SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update --fix-missing && apt upgrade --yes \
+    && apt install -y software-properties-common apt-utils build-essential \
     && add-apt-repository ppa:deadsnakes/ppa \
     && apt update \
-    && apt install -y --no-install-recommends software-properties-common apt-utils build-essential \
-    python3.9-dev python3.9-distutils python3-pip python3-apt \
+    && apt install -y --no-install-recommends python3.9-dev python3.9-distutils python3-pip python3-apt \
     gettext-base default-libmysqlclient-dev virtualenv unattended-upgrades git wget curl vim \
     && apt purge --auto-remove \
     && apt clean \
