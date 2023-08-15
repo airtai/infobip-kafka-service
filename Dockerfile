@@ -12,10 +12,10 @@ SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update --fix-missing && apt upgrade --yes \
-    && apt install -y software-properties-common apt-utils build-essential \
     && add-apt-repository ppa:deadsnakes/ppa \
     && apt update \
-    && apt install -y --no-install-recommends python3.9-dev python3.9-distutils python3-pip python3-apt \
+    && apt install -y --no-install-recommends software-properties-common apt-utils build-essential \
+    python3.9-dev python3.9-distutils python3-pip python3-apt \
     gettext-base default-libmysqlclient-dev virtualenv unattended-upgrades git wget curl vim \
     && apt purge --auto-remove \
     && apt clean \
@@ -39,11 +39,9 @@ COPY setup.py settings.ini scheduler_requirements.txt scripts/start_service.sh R
 # RUN python3 setup.py sdist bdist_wheel
 
 # Install requirements
-RUN pip install -e ".[dev]"
+RUN pip install --no-cache-dir -e ".[dev]"
 
-RUN virtualenv venv -p python3
-RUN venv/bin/pip install -e ".[dev]"
-RUN venv/bin/pip install -r scheduler_requirements.txt
+RUN virtualenv venv -p python3 && venv/bin/pip install --no-cache-dir -e ".[dev]" && venv/bin/pip install --no-cache-dir -r scheduler_requirements.txt
 
 
 ENTRYPOINT []
