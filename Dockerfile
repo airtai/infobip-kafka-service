@@ -24,7 +24,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update --fix-missing && apt upgrade --yes \
     && apt install -y software-properties-common apt-utils build-essential \
-    && apt install -y --no-install-recommends gettext-base default-libmysqlclient-dev python3-virtualenv \
+    && apt install -y --no-install-recommends gettext-base default-libmysqlclient-dev \
     && apt purge --auto-remove --yes \
     && apt clean --yes \
     && rm -rf /var/lib/apt/lists/*
@@ -49,7 +49,7 @@ COPY setup.py settings.ini scheduler_requirements.txt scripts/start_service.sh R
 # Install requirements
 RUN pip install -e ".[dev]"
 
-RUN virtualenv venv -p python3
+RUN python3 -m venv venv
 RUN venv/bin/pip install --no-cache-dir -e ".[dev]" && venv/bin/pip install --no-cache-dir -r scheduler_requirements.txt
 
 ENTRYPOINT []
