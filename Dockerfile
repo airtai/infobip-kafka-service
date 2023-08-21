@@ -1,6 +1,6 @@
 # ARG BASE_IMAGE=ubuntu:22.04
 
-ARG BASE_IMAGE=nvidia/cuda:12.2.0-base-ubuntu20.04
+ARG BASE_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu22.04
 
 FROM $BASE_IMAGE
 
@@ -44,6 +44,7 @@ RUN pip install -e ".[dev]"
 RUN virtualenv venv -p python3
 RUN venv/bin/pip install --no-cache-dir -e ".[dev]" && venv/bin/pip install --no-cache-dir -r scheduler_requirements.txt
 
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/targets/x86_64-linux/lib/
 
 ENTRYPOINT []
 CMD [ "/usr/bin/bash", "-c", "./start_service.sh" ]
