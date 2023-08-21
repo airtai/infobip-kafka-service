@@ -24,7 +24,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update --fix-missing && apt upgrade --yes \
     && apt install -y software-properties-common apt-utils build-essential \
-    && apt install -y --no-install-recommends gettext-base default-libmysqlclient-dev virtualenv \
+    && apt install -y --no-install-recommends gettext-base default-libmysqlclient-dev python3-virtualenv \
     && apt purge --auto-remove --yes \
     && apt clean --yes \
     && rm -rf /var/lib/apt/lists/*
