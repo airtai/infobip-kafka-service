@@ -1,6 +1,6 @@
 # ARG BASE_IMAGE=ubuntu:22.04
 
-ARG BASE_IMAGE=tensorflow/tensorflow:2.10.1-gpu-jupyter
+ARG BASE_IMAGE=tensorflow/tensorflow:2.10.1-gpu
 
 FROM $BASE_IMAGE
 
