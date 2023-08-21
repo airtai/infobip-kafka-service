@@ -1,6 +1,6 @@
 # ARG BASE_IMAGE=ubuntu:22.04
 
-ARG BASE_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu20.04
+ARG BASE_IMAGE=tensorflow/tensorflow:2.10.1-gpu-jupyter
 
 FROM $BASE_IMAGE
 
@@ -17,8 +17,8 @@ RUN apt update --fix-missing && apt upgrade --yes \
     && apt update \
     && apt install -y --no-install-recommends python3.9-dev python3.9-distutils python3-pip python3-apt \
     gettext-base default-libmysqlclient-dev virtualenv unattended-upgrades git wget curl vim \
-    && apt purge --auto-remove \
-    && apt clean \
+    && apt purge --auto-remove --yes \
+    && apt clean --yes \
     && rm -rf /var/lib/apt/lists/*
 
 
@@ -43,8 +43,6 @@ RUN pip install -e ".[dev]"
 
 RUN virtualenv venv -p python3
 RUN venv/bin/pip install --no-cache-dir -e ".[dev]" && venv/bin/pip install --no-cache-dir -r scheduler_requirements.txt
-
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/targets/x86_64-linux/lib/
 
 ENTRYPOINT []
 CMD [ "/usr/bin/bash", "-c", "./start_service.sh" ]
