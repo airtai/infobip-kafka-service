@@ -11,12 +11,20 @@ SHELL ["/bin/bash", "-c"]
 # needed to suppress tons of debconf messages
 ENV DEBIAN_FRONTEND noninteractive
 
+# RUN apt update --fix-missing && apt upgrade --yes \
+#     && apt install -y software-properties-common apt-utils build-essential \
+#     && add-apt-repository ppa:deadsnakes/ppa \
+#     && apt update \
+#     && apt install -y --no-install-recommends python3.9-dev python3.9-distutils python3-pip python3-apt \
+#     gettext-base default-libmysqlclient-dev virtualenv unattended-upgrades git wget curl vim \
+#     && apt purge --auto-remove --yes \
+#     && apt clean --yes \
+#     && rm -rf /var/lib/apt/lists/*
+
+
 RUN apt update --fix-missing && apt upgrade --yes \
     && apt install -y software-properties-common apt-utils build-essential \
-    && add-apt-repository ppa:deadsnakes/ppa \
-    && apt update \
-    && apt install -y --no-install-recommends python3.9-dev python3.9-distutils python3-pip python3-apt \
-    gettext-base default-libmysqlclient-dev virtualenv unattended-upgrades git wget curl vim \
+    && apt install -y --no-install-recommends gettext-base default-libmysqlclient-dev virtualenv \
     && apt purge --auto-remove --yes \
     && apt clean --yes \
     && rm -rf /var/lib/apt/lists/*
