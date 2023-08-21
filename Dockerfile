@@ -1,6 +1,6 @@
 # ARG BASE_IMAGE=ubuntu:22.04
 
-ARG BASE_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu22.04
+ARG BASE_IMAGE=nvidia/cuda:11.8.0-runtime-ubuntu20.04
 
 FROM $BASE_IMAGE
 
