@@ -17,8 +17,8 @@ RUN apt update --fix-missing && apt upgrade --yes \
     && apt update \
     && apt install -y --no-install-recommends python3.9-dev python3.9-distutils python3-pip python3-apt \
     gettext-base default-libmysqlclient-dev virtualenv unattended-upgrades git wget curl vim \
-    && apt purge --auto-remove \
-    && apt clean \
+    && apt purge --auto-remove --yes \
+    && apt clean --yes \
     && rm -rf /var/lib/apt/lists/*
 
 
