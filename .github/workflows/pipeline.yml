@@ -81,7 +81,7 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
         with:
-          root-reserve-mb: 30720
+          root-reserve-mb: 33792
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
@@ -115,7 +115,7 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
         with:
-          root-reserve-mb: 30720
+          root-reserve-mb: 33792
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
