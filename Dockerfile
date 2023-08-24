@@ -12,12 +12,12 @@ SHELL ["/bin/bash", "-c"]
 ENV DEBIAN_FRONTEND noninteractive
 
 # make sure we don't upgrade cuda installed by TF because everything likely will break
-RUN apt-mark hold cuda-compat-11-2
+# RUN apt-mark hold cuda-compat-11-2
 
-RUN apt update --fix-missing && apt upgrade --yes \
-    && apt purge --auto-remove --yes \
-    && apt clean --yes \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt update --fix-missing && apt upgrade --yes \
+#     && apt purge --auto-remove --yes \
+#     && apt clean --yes \
+#     && rm -rf /var/lib/apt/lists/*
 
 # RUN apt update --fix-missing && apt upgrade --yes \
 #     && apt install -y software-properties-common apt-utils build-essential \

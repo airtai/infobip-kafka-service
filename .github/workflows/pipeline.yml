@@ -102,7 +102,7 @@ jobs:
       - run: sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
       # - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY:dev || true
       - run: bash ./scripts/build_docker.sh
-      - run: bash ./scripts/check_docker.sh # ToDo: Disabled this because of disk space issues at CI
+      # - run: bash ./scripts/check_docker.sh # ToDo: Disabled this because of disk space issues at CI
       - name: Push only if branch name is main or dev
         if: github.ref_name == 'main' || github.ref_name == 'dev'
         run: docker push ghcr.io/$GITHUB_REPOSITORY --all-tags
