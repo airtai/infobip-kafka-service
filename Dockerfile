@@ -1,6 +1,6 @@
 # ARG BASE_IMAGE=ubuntu:22.04
 
-ARG BASE_IMAGE=tensorflow/tensorflow:2.10.1-gpu
+ARG BASE_IMAGE=registry.gitlab.com/airt.ai/airt-docker-dask-tf2:dev
 
 FROM $BASE_IMAGE
 
