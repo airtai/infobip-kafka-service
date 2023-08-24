@@ -6,8 +6,7 @@ THRESHOLD=7
 # List of domains for which to check and renew certificates
 DOMAINS=("kafka.staging.airt.ai")
 
-# sudo ufw allow 80
-# sudo ufw reload
+sudo iptables -D INPUT -p tcp --dport 80 -j DROP
 
 for domain in "${DOMAINS[@]}"; do
     # Check if certificate is expiring within the threshold
@@ -34,5 +33,4 @@ for domain in "${DOMAINS[@]}"; do
     fi
 done
 
-# sudo ufw deny 80
-# sudo ufw reload
+sudo iptables -A INPUT -p tcp --dport 80 -j DROP
