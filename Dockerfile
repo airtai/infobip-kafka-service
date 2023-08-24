@@ -1,6 +1,6 @@
 # ARG BASE_IMAGE=ubuntu:22.04
 
-ARG BASE_IMAGE=registry.gitlab.com/airt.ai/airt-docker-dask-tf2:dev
+ARG BASE_IMAGE=tensorflow/tensorflow:2.10.1-gpu
 
 FROM $BASE_IMAGE
 
@@ -10,6 +10,14 @@ SHELL ["/bin/bash", "-c"]
 
 # needed to suppress tons of debconf messages
 ENV DEBIAN_FRONTEND noninteractive
+
+# make sure we don't upgrade cuda installed by TF because everything likely will break
+# RUN apt-mark hold cuda-compat-11-2
+
+# RUN apt update --fix-missing && apt upgrade --yes \
+#     && apt purge --auto-remove --yes \
+#     && apt clean --yes \
+#     && rm -rf /var/lib/apt/lists/*
 
 # RUN apt update --fix-missing && apt upgrade --yes \
 #     && apt install -y software-properties-common apt-utils build-essential \
