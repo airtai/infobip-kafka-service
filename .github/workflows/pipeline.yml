@@ -81,10 +81,13 @@ jobs:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
         with:
-          root-reserve-mb: 33792
+          overprovision-lvm: 'true'
+          # root-reserve-mb: 33792
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-docker-images: 'true'
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -99,12 +102,11 @@ jobs:
       - run: sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
       # - run: docker pull ghcr.io/$GITHUB_REPOSITORY:$GITHUB_REF_NAME || docker pull ghcr.io/$GITHUB_REPOSITORY:dev || true
       - run: bash ./scripts/build_docker.sh
-      # - run: bash ./scripts/check_docker.sh # ToDo: Disabled this because of disk space issues at CI
+      # - run: bash ./scripts/check_docker.sh
       - name: Push only if branch name is main or dev
         if: github.ref_name == 'main' || github.ref_name == 'dev'
         run: docker push ghcr.io/$GITHUB_REPOSITORY --all-tags
 
-  # ToDo: Disabled this because of disk space issues at CI
   # docker_image_check:
   #   runs-on: ubuntu-22.04
   #   needs: docker_build_push
@@ -116,10 +118,13 @@ jobs:
   #     - name: Maximize build space
   #       uses: easimon/maximize-build-space@master # nosemgrep: yaml.github-actions.security.third-party-action-not-pinned-to-commit-sha.third-party-action-not-pinned-to-commit-sha
   #       with:
-  #         root-reserve-mb: 33792
+  #         overprovision-lvm: 'true'
+  #         # root-reserve-mb: 33792
   #         remove-dotnet: 'true'
   #         remove-android: 'true'
   #         remove-haskell: 'true'
+  #         remove-codeql: 'true'
+  #         remove-docker-images: 'true'
   #     - name: Checkout repository
   #       uses: actions/checkout@v3
 
