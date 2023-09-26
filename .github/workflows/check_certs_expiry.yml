@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        kafka_domain: ["kafka.staging.airt.ai", "kafka-cluster-1.staging.airt.ai", "kafka-cluster-2.staging.airt.ai", "kafka.airt.ai", "kafka-cluster-1.airt.ai", "kafka-cluster-2.airt.ai"]
+        kafka_domain: ["kafka-cluster-1.staging.airt.ai", "kafka-cluster-2.staging.airt.ai", "kafka-cluster-1.airt.ai", "kafka-cluster-2.airt.ai"]
     runs-on: ubuntu-22.04
     defaults:
       run:
