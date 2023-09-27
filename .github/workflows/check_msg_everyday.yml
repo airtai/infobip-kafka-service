@@ -1,0 +1,40 @@
+name: Check message everyday for infobip_prediction topic
+
+on:
+  # everyday at 03:00
+  schedule:
+    - cron: "0 3 * * *"
+  # or manually
+  workflow_dispatch:
+
+jobs:
+  check-msg-everyday:
+    name: Check message everyday for infobip_prediction topic
+    strategy:
+      fail-fast: false
+      matrix:
+        server: ["staging", "prod"]
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
+    container:
+      image: ubuntu:22.04
+    env:
+      PROD_CONFIG: ${{ secrets.PROD_CONFIG }}
+      STAGING_CONFIG: ${{ secrets.STAGING_CONFIG }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      # This is to fix GIT not liking owner of the checkout dir - https://github.com/actions/runner/issues/2033#issuecomment-1204205989
+      - run: chown -R $(id -u):$(id -g) $PWD
+
+      - run: echo "PATH=$PATH:/github/home/.local/bin" >> $GITHUB_ENV
+
+      - run: echo "SERVER=${{ matrix.server }}" >> $GITHUB_ENV
+
+      - run: if [[ $KAFKA_DOMAIN == "staging" ]]; then printenv STAGING_CONFIG > "$(pwd)/.env" ; else printenv PROD_CONFIG > "$(pwd)/.env" ; fi;
+
+      - run: python scripts/check_msg.py
