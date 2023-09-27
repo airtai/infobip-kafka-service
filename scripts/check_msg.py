@@ -4,6 +4,10 @@ from datetime import datetime
 
 from aiokafka import AIOKafkaConsumer
 from aiokafka.helpers import create_ssl_context
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 async def check_messages_for_today():
