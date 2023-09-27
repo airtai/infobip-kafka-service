@@ -30,8 +30,9 @@ jobs:
         with:
           python-version: '3.8'
 
-      - run: echo "SERVER=${{ matrix.server }}" >> $GITHUB_ENV
+      - run: apt-get update -y && apt-get install openssh-client git -y
 
+      - run: echo "SERVER=${{ matrix.server }}" >> $GITHUB_ENV
       - run: if [[ $KAFKA_DOMAIN == "staging" ]]; then printenv STAGING_CONFIG > "$(pwd)/.env" ; else printenv PROD_CONFIG > "$(pwd)/.env" ; fi;
 
       - name: Install dependencies
