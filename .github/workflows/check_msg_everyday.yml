@@ -38,5 +38,5 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install aiokafka python-dotenv
       - run: python scripts/check_msg.py
