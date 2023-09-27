@@ -21,6 +21,7 @@ jobs:
     container:
       image: ubuntu:22.04
     env:
+      ACCESS_REP_TOKEN: ${{ secrets.ACCESS_REP_TOKEN }}
       PROD_CONFIG: ${{ secrets.PROD_CONFIG }}
       STAGING_CONFIG: ${{ secrets.STAGING_CONFIG }}
     steps:
@@ -37,4 +38,5 @@ jobs:
 
       - run: if [[ $KAFKA_DOMAIN == "staging" ]]; then printenv STAGING_CONFIG > "$(pwd)/.env" ; else printenv PROD_CONFIG > "$(pwd)/.env" ; fi;
 
+      - run: pip install -r requirements.txt
       - run: python scripts/check_msg.py
