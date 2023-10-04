@@ -26,9 +26,7 @@ async def check_messages_for_today():
     }
 
     # Create a Kafka consumer
-    consumer = AIOKafkaConsumer(
-        "infobip_prediction", **kafka_config
-    )
+    consumer = AIOKafkaConsumer("infobip_prediction", **kafka_config)
 
     # Subscribe to the 'prediction' topic
     await consumer.start()
@@ -38,9 +36,7 @@ async def check_messages_for_today():
         today = datetime.now().date()
         async for msg in consumer:
             # Check if the msg timestamp is for today
-            msg_timestamp = datetime.fromtimestamp(
-                msg.timestamp / 1000.0
-            ).date()
+            msg_timestamp = datetime.fromtimestamp(msg.timestamp / 1000.0).date()
             if msg_timestamp == today:
                 print("Found a message for today:", msg.value.decode("utf-8"))
                 break  # Exit the loop once a message for today is found
@@ -53,4 +49,6 @@ async def check_messages_for_today():
 
 
 if __name__ == "__main__":
-    asyncio.run(check_messages_for_today())
+    asyncio.run(
+        asyncio.wait_for(check_messages_for_today(), timeout=3600)
+    )  # Set timeout to one hour (3600 seconds)
