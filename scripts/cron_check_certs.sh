@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Set the threshold for certificate expiration (in days)
-THRESHOLD=7
+THRESHOLD=30
 
 # List of domains for which to check and renew certificates
-DOMAINS=("kafka.staging.airt.ai")
+DOMAINS=("kafka-cluster-1.staging.airt.ai")
 
 sudo iptables -D INPUT -p tcp --dport 80 -j DROP
 
