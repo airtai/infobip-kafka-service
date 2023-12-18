@@ -1,5 +1,8 @@
 name: Pipeline
-on: [push]
+on:
+  push:
+  # or manually
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -57,7 +60,7 @@ jobs:
           pip list
       - name: Install testing deps
         run: |
-          fastkafka docs install_deps
+          # fastkafka docs install_deps
           fastkafka testing install_deps
       - name: Run nbdev tests
         env:
