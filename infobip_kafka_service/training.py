@@ -7,8 +7,6 @@ __all__ = ['root_path', 'downloading_group_id', 'training_group_id', 'app']
 from os import environ
 from pathlib import Path
 
-from airt.infobip.kafka_training import create_app
-
 # %% ../nbs/Training.ipynb 3
 root_path = Path(environ["ROOT_PATH"])
 downloading_group_id = environ["DOWNLOADING_GROUP_ID"]

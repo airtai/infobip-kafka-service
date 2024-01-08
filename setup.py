@@ -54,7 +54,6 @@ from os import environ
 
 
 requirements = [
-    f"airt@git+https://oauth2:{environ['ACCESS_REP_TOKEN']}@gitlab.com/airt.ai/airt.git@infobip-production",
     "cffi==1.15.1",
     "traceback-with-variables==2.0.4",
 ]
@@ -67,6 +66,12 @@ dev_requirements = [
     "bandit==1.7.5",
     "semgrep==1.21.0",
     "nbdev==2.3.12",
+    "faststream==0.3.12",
+    "sqlalchemy==2.0.25",
+    "pandas==2.1.4",
+    "clickhouse-sqlalchemy==0.3.0",
+    "dask[diagnostics]==2023.12.1",
+    "pyarrow==14.0.2",
 ]
 
 setuptools.setup(
