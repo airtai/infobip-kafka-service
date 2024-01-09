@@ -173,6 +173,3 @@ mkdocs/site/
 *.log
 test.env
 storage/
-
-# Ignore VSCode devcontainer setup
-.devcontainer
