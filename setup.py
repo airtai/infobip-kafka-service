@@ -64,7 +64,7 @@ dev_requirements = [
     "black==23.3.0",
     "isort==5.12.0",
     "bandit==1.7.5",
-    "semgrep==1.21.0",
+    "semgrep>=1.55.0",
     "nbdev==2.3.12",
     "faststream==0.3.12",
     "sqlalchemy==2.0.25",

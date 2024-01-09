@@ -22,6 +22,7 @@ from infobip_kafka_service.helpers import (
     get_aio_kafka_config,
     ModelTrainingRequest,
     StartPrediction,
+    TaskType,
 )
 from .logger import get_logger
 
@@ -47,9 +48,9 @@ async def start_weekly_training() -> None:
         for row in rows:
             model_training_req = ModelTrainingRequest(
                 AccountId=row["AccountId"],
-                ApplicationId=row["ApplicationId"],  # type: ignore
-                ModelId=row["ModelId"],  # type: ignore
-                task_type="churn",  # type: ignore
+                ApplicationId=row["ApplicationId"],
+                ModelId=row["ModelId"],
+                task_type=TaskType.churn,
                 total_no_of_records=0,
             )
             msg = (model_training_req.json()).encode("utf-8")
@@ -69,9 +70,9 @@ async def start_daily_prediction() -> None:
         for row in rows:
             start_prediction = StartPrediction(
                 AccountId=row["AccountId"],
-                ApplicationId=row["ApplicationId"],  # type: ignore
-                ModelId=row["ModelId"],  # type: ignore
-                task_type="churn",  # type: ignore
+                ApplicationId=row["ApplicationId"],
+                ModelId=row["ModelId"],
+                task_type=TaskType.churn,
             )
             msg = (start_prediction.json()).encode("utf-8")
             logger.info(f"Sending daily retraining for {msg=}")

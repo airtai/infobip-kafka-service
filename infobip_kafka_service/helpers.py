@@ -37,16 +37,16 @@ class TaskType(str, Enum):
 
 class ModelTrainingRequest(BaseModel):
     AccountId: NonNegativeInt = Field(
-        ..., example=202020, description="ID of an account"
+        ..., examples=[202020], description="ID of an account"
     )
     ApplicationId: Optional[str] = Field(
         default=None,
-        example="TestApplicationId",
+        examples=["TestApplicationId"],
         description="Id of the application in case there is more than one for the AccountId",
     )
     ModelId: str = Field(
         ...,
-        example="ChurnModelForDrivers",
+        examples=["ChurnModelForDrivers"],
         description="User supplied ID of the model trained",
     )
     task_type: TaskType = Field(
@@ -54,28 +54,28 @@ class ModelTrainingRequest(BaseModel):
     )
     total_no_of_records: NonNegativeInt = Field(
         ...,
-        example=1_000_000,
+        examples=[1_000_000],
         description="approximate total number of records (rows) to be ingested",
     )
 
 
 class StartPrediction(BaseModel):
     AccountId: NonNegativeInt = Field(
-        ..., example=202020, description="ID of an account"
+        ..., examples=[202020], description="ID of an account"
     )
     ApplicationId: Optional[str] = Field(
         default=None,
-        example="TestApplicationId",
+        examples=["TestApplicationId"],
         description="Id of the application in case there is more than one for the AccountId",
     )
     ModelId: str = Field(
         ...,
-        example="ChurnModelForDrivers",
+        examples=["ChurnModelForDrivers"],
         description="User supplied ID of the model trained",
     )
 
     task_type: TaskType = Field(
         ...,
-        example="churn",
+        examples=["churn"],
         description="Name of the model used (churn, propensity to buy)",
     )
